@@ -80,10 +80,43 @@ self.addEventListener('fetch', function(event) {
   event.respondWith(
     new Response('Hello <b>World!</b>', {
       headers: {
-        'foo': 'bar'
+        'Content-Type': 'text/html'
       }
     })
   );
 });
 ```
 
+When we use the 'event.reposndWith' we are hijacking the page, like saying to the browser 'show this now!' It's fast and works even offline (shhh, it works because it's in the service worker, don't tell anyone).
+
+#### fetch
+```javascript
+// Use fetch  instead of the old buddy XMLHttpRequest(RIP)
+fetch('/foo').then(function(response){
+  return response.json(); //get the response as json format
+}).then(function(data){
+  console.log(data); //do stuff with the data that came from the response
+}).catch(function(){
+  console.log('We have a problem :/'); //in case all failed let's do something
+});
+```
+Here's a todo list: Change all XMLHttpRequest code that you found to fetch()!
+
+### Intercept the request and change the response
+
+```javascript
+  //check for the file extension that it's been requested
+  if ((event.request.url).slice(-3) == 'jpg') {
+    event.respondWith(
+      //if we find any, we change it 'muahahahah'...
+      //...because we can... but use it for good...
+      fetch('/imgs/dr-evil.gif')
+    );
+  }
+```
+
+[Would like to know more?](https://developer.mozilla.org/en-US/docs/Web/API/Request)
+
+![Starship Troopers](https://media.giphy.com/media/MhVXiu5c4SWME/giphy.gif)
+
+(Yep, that was a Starship Troopers reference)
